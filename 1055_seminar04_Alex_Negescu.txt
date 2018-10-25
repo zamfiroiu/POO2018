@@ -1,0 +1,96 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Carte
+{
+public:
+	const int idCarte; // ID ul nu se va modifica, fiind constant
+	const int codISBN;
+	string titlu;
+	unsigned int nrPagini;
+	double pret;
+	static double TVA; // valabil pentru toate cartile
+	static int nrExemplare;
+	static int contor;
+
+	// Constructor fara parametru:
+
+	Carte() : idCarte(contor++), codISBN(1234)  // initializam cele 2 constante; constantele se initializeaza in antetul constructorului cu valorile dorite
+	{
+		titlu = "Ion";
+		pret = 20;
+		nrPagini = 300;
+		nrExemplare++;
+	}
+
+	// Constructor cu parametri:
+
+	Carte(int isbn, string titlu, int nrPagini, double pret) : idCarte(contor++), codISBN(isbn) {
+
+		this -> titlu = titlu;
+		this-> nrPagini = nrPagini;
+		this-> pret = pret;
+		nrExemplare++;
+	}
+
+	Carte(string s, double pret) : idCarte(contor++), codISBN(0)
+	{
+		nrPagini = 300;
+		titlu = s;
+		this-> pret= pret;
+		nrExemplare++;
+	}
+
+	void afisare()
+	{
+		cout << "ID: " << idCarte << " ISBN: " << codISBN << " TVA: " << TVA << "%. ";
+		cout << titlu << " costa " << pret << " lei si are " << nrPagini << " pagini" << endl;
+	}
+
+	~Carte()
+	{
+		nrExemplare--;
+	}
+
+};
+
+//functia de afisare trebuie scrisa in interiorul clasei
+
+double Carte::TVA = 5;
+int Carte::nrExemplare = 0;
+int Carte::contor = 1;
+
+// obiectul repr o instanta a clasei
+// constructorul nu are tip returnat
+// constructorii se pun in zona public
+// constructorul se creeaza la apelarea de obiecte
+
+
+
+void main()
+{
+	Carte c1;
+	cout << c1.nrExemplare << endl; // afisare prin intermediul obiectului
+	cout << Carte::TVA << "%" << endl;
+	Carte c2(3456, "Iona", 80, 10);
+	cout << Carte::nrExemplare << endl; // afisare prin intermediul clasei
+	{
+		Carte c5;
+		cout << "In corp: " << Carte::nrExemplare << endl;
+	}
+	cout << "In afara corpului: " << Carte::nrExemplare << endl;
+
+	c1.afisare();
+	c2.afisare();
+
+	Carte* pc1 = &c1;
+
+	Carte* pc2 = new Carte(5678, "Mara", 200, 15);
+
+	cout << Carte::nrExemplare<<endl;
+
+	Carte c3("Ana", 400);
+	c3.afisare();
+}
